@@ -1,17 +1,17 @@
 <template>
-  <div :class="classes" v-click-outside="close">
-    <button type="button" class="tree-select-single" v-if="selectedItems.length <= 1" @click="open = !open">
+  <div :class="classes" v-click-outside="close" onselectstart="return false">
+    <button type="button" class="tree-select-single" @click="open = !open" v-if="selectedItems.length <= 1">
       <span v-if="selectedItems.length === 0">{{placeholder}}</span>
       <span v-if="selectedItems.length === 1">{{selectedItems[0].text}}</span>
     </button>
-    <div class="tree-select-multiple" v-else>
+    <div class="tree-select-multiple" @click="open = !open" v-else>
       <div class="tree-select-tag" v-for="item in selectedItems">
         {{item.text}}
       </div>
     </div>
     <i class="tree-selec-allow" @click="open = !open"></i>
     <div class="tree-select-dropdown">
-      <tree :data="data"
+      <tree :data="data" ref="tree"
             :size="size"
             :showCheckbox="showCheckbox"
             :wholeRow="wholeRow"
@@ -29,18 +29,6 @@
 <script>
   import Vue from 'vue'
   import Tree from './tree.vue'
-
-  function handleRecursionDataChilds (items, func) {
-    if (items && items.length > 0) {
-      for (let i in items) {
-        var item = items[i]
-        func(items, item, i)
-        if (item.children && item.children.length > 0) {
-          handleRecursionDataChilds(item.children, func)
-        }
-      }
-    }
-  }
 
   Vue.directive('clickOutside', {
     bind: function (el, binding, vNode) {
@@ -114,11 +102,11 @@
     methods: {
       itemClick () {
         this.selectedItems.length = 0
-        handleRecursionDataChilds(this.data, (items, item, i) => {
-          if (item.selected) {
+        this.$refs.tree.handleRecursionNodeChilds(this.$refs.tree, node => {
+          if (node.model.selected) {
             this.selectedItems.push({
-              text: item[this.textFieldName],
-              value: item[this.valueFieldName]
+              text: node.model[this.textFieldName],
+              value: node.model[this.valueFieldName]
             })
           }
         })
