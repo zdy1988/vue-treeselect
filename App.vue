@@ -1,19 +1,17 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
     <h2>Tree Select</h2>
     <div style="width:400px; margin:0 auto; text-align:left;">
       <h3>Single Select Value: {{selectItem}}</h3>
-      <tree-select :data="data" value-field-name="id" v-model="selectItem"></tree-select>
+      <v-tree-select :data="data" value-field-name="id" v-model="selectItem"></v-tree-select>
       <h3>Multiple Select Value: {{selectItem2}}</h3>
-      <tree-select :data="data2" value-field-name="id" show-checkbox multiple v-model="selectItem2"></tree-select>
+      <v-tree-select :data="data2" value-field-name="id" show-checkbox multiple v-model="selectItem2"></v-tree-select>
     </div>
   </div>
 </template>
 
 <script>
-  import TreeSelect from './src/treeselect.vue'
   export default {
     name: 'app',
     data () {
@@ -135,9 +133,6 @@
         ],
         selectItem2: null
       }
-    },
-    components: {
-      TreeSelect
     }
   }
 </script>

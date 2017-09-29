@@ -1,5 +1,5 @@
 <template>
-  <div :class="classes" v-click-outside="close" onselectstart="return false">
+  <div :class="classes" onselectstart="return false">
     <button type="button" class="tree-select-single" @click="open = !open" v-if="selectedItems.length <= 1">
       <span v-if="selectedItems.length === 0">{{placeholder}}</span>
       <span v-if="selectedItems.length === 1">{{selectedItems[0].text}}</span>
@@ -11,7 +11,7 @@
     </div>
     <i class="tree-selec-allow" @click="open = !open"></i>
     <div class="tree-select-dropdown">
-      <tree :data="data" ref="tree"
+      <v-jstree :data="data" ref="tree"
             :size="size"
             :showCheckbox="showCheckbox"
             :wholeRow="wholeRow"
@@ -22,48 +22,15 @@
             :valueFieldName="valueFieldName"
             :async="async"
             :loadingText="loadingText"
-            @item-click="itemClick"></tree>
+            @item-click="itemClick"></v-jstree>
     </div>
   </div>
 </template>
 <script>
-  import Vue from 'vue'
-  import Tree from './tree.vue'
-
-  Vue.directive('clickOutside', {
-    bind: function (el, binding, vNode) {
-      if (typeof binding.value !== 'function') {
-
-        let msg = `in [clickoutside] directives, provided expression '${binding.expression}' is not a function `
-
-        const compName = vNode.context.name
-
-        if (compName) {
-          msg += `in ${compName}`
-        }
-        console.error(msg)
-      }
-
-      var handler = (e) => {
-        if (!el.contains(e.target) && el !== e.target) {
-          binding.value(e)
-        } else {
-          return false
-        }
-      }
-
-      el.__clickOutSide__ = handler
-
-      document.addEventListener('click', handler, true)
-    },
-    unbind: function (el) {
-      document.removeEventListener('click', el.__clickOutSide__, true)
-      el.__clickOutSide__ = null
-
-    }
-  })
+  import VJstree from 'vue-jstree/src/tree.vue'
 
   export default{
+    name: 'VTreeSelect',
     data () {
       return {
         open: false,
@@ -119,16 +86,131 @@
         } else {
           this.$emit('update:value', null)
         }
-      },
-      close () {
-        this.open = false
       }
     },
+    mounted () {
+      var el = this.$el
+      var self = this
+      document.addEventListener('click', (e) => {
+        if (!el.contains(e.target) && el !== e.target) {
+          this.open = false
+        } else {
+          return false
+        }
+      }, true)
+    },
     components: {
-      Tree
+      VJstree
     }
   }
 </script>
 <style lang="less">
-  @import "./less/style";
+  .tree-select {
+    width: 100%;
+    height: auto;
+    line-height: 1.42857;
+    color: #555;
+    border: 1px solid #c2cad8;
+    background-color: #fff;
+    display: inline-block;
+    outline: 0!important;
+    box-shadow: none!important;
+    position: relative;
+    vertical-align: middle;
+
+    > .tree-select-single{
+      width: 100%;
+      line-height: 1.44;
+      padding-right: 25px;
+      text-align: left;
+      margin-bottom: 0;
+      vertical-align: middle;
+      touch-action: manipulation;
+      cursor: pointer;
+      border: none;
+      background-color: #fff;
+      white-space: nowrap;
+      padding: 6px 12px;
+      font-size: 14px;
+      outline: 0!important;
+
+      &:hover {
+        transition: all .3s;
+        background-color: #e1e5ec;
+      }
+    }
+
+    > .tree-select-multiple{
+      max-width: 100%;
+      line-height: 24px;
+      padding: 4px 32px 2px 6px;
+      vertical-align: middle;
+      cursor: pointer;
+
+      > .tree-select-tag {
+        display: inline-block;
+        background-color: #36c6d3;
+        margin-right: 2px;
+        margin-bottom: 2px;
+        color: white;
+        text-shadow: none!important;
+        font-size: 14px;
+        font-weight: 300;
+        padding: 0px 6px;
+      }
+    }
+
+    > .tree-select-dropdown{
+      cursor: pointer;
+      position: absolute;
+      width: 100%;
+      max-height: 0px;
+      overflow: auto;
+      min-height: 0px;
+      z-index: 1000!important;
+      background-color: #fff;
+      border: 1px solid #eee;
+      border-top: 0px;
+      border-bottom: 0px;
+      margin: 1px 0px 0px -1px;
+      transition: all .3s ease-in-out;
+
+      > .tree {
+        margin: 8px;
+      }
+    }
+
+    > .tree-selec-allow{
+
+      cursor: pointer;
+
+      width:0px;
+      height:0px;
+      border-width:6px;
+      border-style:solid;
+      border-color:#555 transparent transparent;
+      font-size:0;
+      line-height:0;
+
+      position: absolute;
+      top:10px;
+      right:10px;
+      transition: all .3s;
+      transform:rotate(90deg);
+
+    }
+
+    &.tree-select-open{
+      > .tree-selec-allow{
+        transform:rotate(0deg);
+        top:12px;
+        right:8px;
+      }
+      > .tree-select-dropdown{
+        border-bottom: 1px solid #eee;
+        margin: 1px -1px 0px -1px;
+        max-height: 400px;
+      }
+    }
+  }
 </style>
