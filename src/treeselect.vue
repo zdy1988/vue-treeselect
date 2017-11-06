@@ -68,7 +68,7 @@
     },
     methods: {
       itemClick () {
-        this.selectedItems.length = 0
+        this.selectedItems = []
         this.$refs.tree.handleRecursionNodeChilds(this.$refs.tree, node => {
           if (node.model.selected) {
             this.selectedItems.push({
