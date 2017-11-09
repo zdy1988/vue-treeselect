@@ -1,13 +1,14 @@
 {
   "name": "vue-treeselect",
   "description": "a tree select plugin for vue2",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "keywords": [
     "vue2",
     "tree",
     "select"
   ],
   "author": "zdy1988 <virus_zhh@126.com>",
+  "main": "dist/vue-treeselect.js",
   "private": false,
   "license": "MIT",
   "repository": {
