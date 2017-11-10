@@ -3,14 +3,12 @@
  */
 import VTreeSelect from './treeselect.vue'
 
-var component = {
-  install(Vue){
-    Vue.component(VTreeSelect.name, VTreeSelect)
-  }
+VTreeSelect.install = function(Vue){
+  Vue.component(VTreeSelect.name, VTreeSelect)
 }
 
 if (typeof window !== 'undefined' && window.Vue) {
-  window.Vue.use(component);
+  window.Vue.use(VTreeSelect);
 }
 
 export default VTreeSelect

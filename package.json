@@ -1,7 +1,7 @@
 {
   "name": "vue-treeselect",
   "description": "a tree select plugin for vue2",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "keywords": [
     "vue2",
     "tree",
