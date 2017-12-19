@@ -68,13 +68,11 @@
     },
     methods: {
       itemClick () {
+        var self = this
         this.selectedItems = []
         this.$refs.tree.handleRecursionNodeChilds(this.$refs.tree, node => {
           if (node.model.selected) {
-            this.selectedItems.push({
-              text: node.model[this.textFieldName],
-              value: node.model[this.valueFieldName]
-            })
+            self.addSelectNode(node)
           }
         })
         if (this.selectedItems.length === 1) {
@@ -86,6 +84,36 @@
         } else {
           this.$emit('update:value', null)
         }
+      },
+      addSelectNode (node) {
+        this.selectedItems.push({
+          text: node.model[this.textFieldName],
+          value: node.model[this.valueFieldName]
+        })
+      },
+      updateValue (val) {
+        var self = this
+        var isBreak = false
+        this.$refs.tree.handleRecursionNodeChilds(this.$refs.tree, node => {
+          if (this.multiple) {
+            if (val.indexOf(node.model[self.valueFieldName]) !== -1) {
+              self.addSelectNode(node)
+              node.model.selected = true
+            } else {
+              node.model.selected = false
+            }
+          } else {
+            if (isBreak === false) {
+              if (node.model[self.valueFieldName] === val) {
+                isBreak = true
+                self.addSelectNode(node)
+                node.model.selected = true
+              } else {
+                node.model.selected = false
+              }
+            }
+          }
+        })
       }
     },
     mounted () {
@@ -98,6 +126,9 @@
           return false
         }
       }, true)
+      if (this.value) {
+        this.updateValue(this.value)
+      }
     },
     components: {
       VJstree

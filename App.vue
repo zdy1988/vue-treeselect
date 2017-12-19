@@ -73,7 +73,7 @@
             "text": "And wholerow selection"
           }
         ],
-        selectItem: null,
+        selectItem: 'Same but with checkboxes',
         data2: [
           {
             "text": "Same but with checkboxes",
@@ -131,7 +131,7 @@
             "text": "And wholerow selection"
           }
         ],
-        selectItem2: null
+        selectItem2: [ 'Same but with checkboxes', 'initially selected' ]
       }
     }
   }
