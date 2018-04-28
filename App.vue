@@ -5,8 +5,10 @@
     <div style="width:400px; margin:0 auto; text-align:left;">
       <h3>Single Select Value: {{selectItem}}</h3>
       <v-tree-select :data="data" value-field-name="id" v-model="selectItem"></v-tree-select>
+      <button @click="selectItem = 2">set selectItem = 2</button>
       <h3>Multiple Select Value: {{selectItem2}}</h3>
       <v-tree-select :data="data2" value-field-name="id" show-checkbox multiple v-model="selectItem2"></v-tree-select>
+      <button @click="selectItem2 = [4,5]">set selectItem2 = [4,5]</button>
     </div>
   </div>
 </template>
@@ -18,120 +20,150 @@
       return {
         data: [
           {
+            "id": 1,
             "text": "Same but with checkboxes",
             "children": [
               {
+                "id": 2,
                 "text": "initially selected",
               },
               {
+                "id": 3,
                 "text": "custom icon",
               },
               {
+                "id": 4,
                 "text": "initially open",
                 "children": [
                   {
+                    "id": 5,
                     "text": "Another node"
                   }
                 ]
               },
               {
+                "id": 6,
                 "text": "custom icon",
               },
               {
+                "id": 7,
                 "text": "disabled node",
                 "disabled": true
               }
             ]
           },
           {
+            "id": 8,
             "text": "Same but with checkboxes",
             "children": [
               {
+                "id": 9,
                 "text": "initially selected",
               },
               {
+                "id": 10,
                 "text": "custom icon",
               },
               {
+                "id": 11,
                 "text": "initially open",
                 "children": [
                   {
+                    "id": 12,
                     "text": "Another node"
                   }
                 ]
               },
               {
+                "id": 13,
                 "text": "custom icon",
               },
               {
+                "id": 14,
                 "text": "disabled node",
                 "disabled": true
               }
             ]
           },
           {
+            "id": 15,
             "text": "And wholerow selection"
           }
         ],
-        selectItem: 'Same but with checkboxes',
+        selectItem: null,
         data2: [
           {
+            "id": 1,
             "text": "Same but with checkboxes",
             "children": [
               {
+                "id": 2,
                 "text": "initially selected",
               },
               {
+                "id": 3,
                 "text": "custom icon",
               },
               {
+                "id": 4,
                 "text": "initially open",
                 "children": [
                   {
+                    "id": 5,
                     "text": "Another node"
                   }
                 ]
               },
               {
+                "id": 6,
                 "text": "custom icon",
               },
               {
+                "id": 7,
                 "text": "disabled node",
                 "disabled": true
               }
             ]
           },
           {
+            "id": 8,
             "text": "Same but with checkboxes",
             "children": [
               {
+                "id": 9,
                 "text": "initially selected",
               },
               {
+                "id": 10,
                 "text": "custom icon",
               },
               {
+                "id": 11,
                 "text": "initially open",
                 "children": [
                   {
+                    "id": 12,
                     "text": "Another node"
                   }
                 ]
               },
               {
+                "id": 13,
                 "text": "custom icon",
               },
               {
+                "id": 14,
                 "text": "disabled node",
                 "disabled": true
               }
             ]
           },
           {
+            "id": 15,
             "text": "And wholerow selection"
           }
         ],
-        selectItem2: [ 'Same but with checkboxes', 'initially selected' ]
+        selectItem2: [ 3, 4 ]
       }
     }
   }

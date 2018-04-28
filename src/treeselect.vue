@@ -14,12 +14,14 @@
       <v-jstree :data="data" ref="tree"
             :size="size"
             :showCheckbox="showCheckbox"
+            :allowTransition="allowTransition"
             :wholeRow="wholeRow"
             :noDots="noDots"
             :multiple="multiple"
             :allowBatch="allowBatch"
             :textFieldName="textFieldName"
             :valueFieldName="valueFieldName"
+            :childrenFieldName="childrenFieldName"
             :async="async"
             :loadingText="loadingText"
             @item-click="itemClick"></v-jstree>
@@ -43,12 +45,14 @@
       data: {type: Array},
       size: {type: String, validator: value => ['large', 'small'].indexOf(value) > -1},
       showCheckbox: {type: Boolean, default: false},
+      allowTransition: {type: Boolean, default: true},
       wholeRow: {type: Boolean, default: false},
       noDots: {type: Boolean, default: false},
       multiple: {type: Boolean, default: false},
       allowBatch: {type: Boolean, default: false},
       textFieldName: {type: String, default: 'text'},
       valueFieldName: {type: String, default: 'value'},
+      childrenFieldName: {type: String, default: 'children'},
       async: {type: Function},
       loadingText: {type: String, default: 'Loading...'},
       klass: String
@@ -56,6 +60,14 @@
     model: {
       prop: 'value',
       event: 'update:value'
+    },
+    watch: {
+      value (val, oldVal) {
+        if (val !== oldVal) {
+          this.selectedItems = []
+          this.updateValue(val)
+        }
+      }
     },
     computed: {
       classes () {
@@ -71,7 +83,7 @@
         var self = this
         this.selectedItems = []
         this.$refs.tree.handleRecursionNodeChilds(this.$refs.tree, node => {
-          if (node.model.selected) {
+          if (node.model && node.model.selected) {
             self.addSelectNode(node)
           }
         })
@@ -95,21 +107,23 @@
         var self = this
         var isBreak = false
         this.$refs.tree.handleRecursionNodeChilds(this.$refs.tree, node => {
-          if (this.multiple) {
-            if (val.indexOf(node.model[self.valueFieldName]) !== -1) {
-              self.addSelectNode(node)
-              node.model.selected = true
-            } else {
-              node.model.selected = false
-            }
-          } else {
-            if (isBreak === false) {
-              if (node.model[self.valueFieldName] === val) {
-                isBreak = true
+          if (node.model) {
+            if (this.multiple) {
+              if (val.indexOf(node.model[self.valueFieldName]) !== -1) {
                 self.addSelectNode(node)
                 node.model.selected = true
               } else {
                 node.model.selected = false
+              }
+            } else {
+              if (isBreak === false) {
+                if (node.model[self.valueFieldName] === val) {
+                  isBreak = true
+                  self.addSelectNode(node)
+                  node.model.selected = true
+                } else {
+                  node.model.selected = false
+                }
               }
             }
           }
@@ -118,7 +132,6 @@
     },
     mounted () {
       var el = this.$el
-      var self = this
       document.addEventListener('click', (e) => {
         if (!el.contains(e.target) && el !== e.target) {
           this.open = false
